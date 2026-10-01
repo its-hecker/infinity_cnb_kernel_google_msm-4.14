@@ -1,3 +1,3 @@
-[submodule "KernelSU"]
+[submodule "KSU Next-Legacy"]
 	path = KernelSU
-	url = https://github.com/ReSukiSU/ReSukiSU
+	url = https://github.com/its-hecker/KernelSU-Next/tree/legacy_coral
