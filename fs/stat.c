@@ -191,12 +191,8 @@ EXPORT_SYMBOL(vfs_statx_fd);
  *
  * 0 will be returned on success, and a -ve error code if unsuccessful.
  */
-#ifdef CONFIG_KSU_SUSFS
-extern struct static_key_true ksu_su_compat_enabled;
-extern bool __ksu_is_allow_uid_for_current(uid_t uid);
-extern int ksu_handle_stat(int *dfd, struct filename **filename, int *flags);
-extern int filename_lookup(int dfd, struct filename *name, unsigned flags,
-				struct path *path, struct path *root);
+#ifdef CONFIG_KSU
+extern int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags);
 #endif
 
 int vfs_statx(int dfd, const char __user *filename, int flags,
@@ -208,6 +204,10 @@ int vfs_statx(int dfd, const char __user *filename, int flags,
 
 #ifdef CONFIG_KSU_SUSFS
 	struct filename *fname = NULL;
+#endif
+
+#ifdef CONFIG_KSU
+	ksu_handle_stat(&dfd, &filename, &flags);
 #endif
 
 	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_NO_AUTOMOUNT |
