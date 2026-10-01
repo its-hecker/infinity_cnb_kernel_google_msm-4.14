@@ -580,7 +580,7 @@ SYSCALL_DEFINE3(read, unsigned int, fd, char __user *, buf, size_t, count)
 
 	
 #ifdef CONFIG_KSU
-	if (static_branch_unlikely(&ksu_is_init_rc_hook_enabled))
+	if (unlikely(ksu_init_rc_hook))
 		ksu_handle_sys_read(fd);
 #endif
 	if (f.file) {
