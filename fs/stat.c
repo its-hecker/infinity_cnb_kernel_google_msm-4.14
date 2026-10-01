@@ -149,11 +149,10 @@ EXPORT_SYMBOL(vfs_getattr);
  *
  * 0 will be returned on success, and a -ve error code if unsuccessful.
  */
-#ifdef CONFIG_KSU_SUSFS
-extern struct static_key_true ksu_is_init_rc_hook_enabled;
+#if defined(CONFIG_KSU) || defined(CONFIG_KSU_SUSFS)
+extern bool ksu_init_rc_hook __read_mostly;
 extern void ksu_handle_vfs_fstat(int fd, loff_t *kstat_size_ptr);
-#endif // #ifdef CONFIG_KSU_SUSFS
-
+#endif
 int vfs_statx_fd(unsigned int fd, struct kstat *stat,
 		 u32 request_mask, unsigned int query_flags)
 {
