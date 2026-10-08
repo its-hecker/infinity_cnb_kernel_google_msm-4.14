@@ -956,8 +956,9 @@ bool pm_wakeup_pending(void)
 
 void pm_system_wakeup(void)
 {
-	atomic_inc(&pm_abort_suspend);
-	s2idle_wake();
+	/* Only the first pending abort needs to kick CPUs out of s2idle. */
+	if (atomic_inc_return(&pm_abort_suspend) == 1)
+		s2idle_wake();
 }
 EXPORT_SYMBOL_GPL(pm_system_wakeup);
 
